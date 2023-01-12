@@ -1,0 +1,285 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Gegenereerd op: 12 jan 2023 om 16:20
+-- Serverversie: 10.4.24-MariaDB
+-- PHP-versie: 8.1.5
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `excellent_taste`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `bestellingen`
+--
+
+CREATE TABLE `bestellingen` (
+  `id` int(11) NOT NULL,
+  `reservering_id` int(11) NOT NULL,
+  `menu_item_id` int(11) NOT NULL,
+  `aantal` int(11) NOT NULL,
+  `gereserveerd` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `bestellingen`
+--
+
+INSERT INTO `bestellingen` (`id`, `reservering_id`, `menu_item_id`, `aantal`, `gereserveerd`) VALUES
+(2, 1, 1, 1, 1),
+(3, 1, 7, 2, 0),
+(4, 2, 8, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `gerechtcategorien`
+--
+
+CREATE TABLE `gerechtcategorien` (
+  `id` int(11) NOT NULL,
+  `code` varchar(3) NOT NULL,
+  `categorien` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `gerechtcategorien`
+--
+
+INSERT INTO `gerechtcategorien` (`id`, `code`, `categorien`) VALUES
+(1, 'vg1', 'Voorgerecht'),
+(2, 'hg1', 'Hoofdgerecht'),
+(3, 'ng1', 'Nagerecht'),
+(4, 'dr1', 'Dranken'),
+(5, 'ha1', 'Hapjes');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `gerechtsoorten`
+--
+
+CREATE TABLE `gerechtsoorten` (
+  `id` int(11) NOT NULL,
+  `code` varchar(3) NOT NULL,
+  `naam` varchar(20) NOT NULL,
+  `gerechtcategorie_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `gerechtsoorten`
+--
+
+INSERT INTO `gerechtsoorten` (`id`, `code`, `naam`, `gerechtcategorie_id`) VALUES
+(7, 'kh1', 'Koude hapjes', 5),
+(8, 'wh1', 'Warme hapjes', 5),
+(9, 'ij1', 'Ijs', 3),
+(10, 'ms1', 'Mousse', 3),
+(11, 'hv1', 'Vegetarisch', 2),
+(12, 'hv2', 'Vis', 2),
+(13, 'vh3', 'Vlees', 2),
+(14, 'vk1', 'Koud', 1),
+(15, 'vw1', 'Warm', 1),
+(16, 'fri', 'Frisdrank', 4),
+(17, 'bi3', 'Bieren', 4),
+(18, 'wi1', 'Wijnen', 4),
+(19, 'wd1', 'Warme dranken', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `klanten`
+--
+
+CREATE TABLE `klanten` (
+  `id` int(11) NOT NULL,
+  `naam` varchar(255) NOT NULL,
+  `telefoon` varchar(20) NOT NULL,
+  `email` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `klanten`
+--
+
+INSERT INTO `klanten` (`id`, `naam`, `telefoon`, `email`) VALUES
+(1, 'kyran', '0625401140', 'kyranidowu@icloud.com'),
+(2, 'Jaeden', '0630113022', 'Jeden@icloud.com');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `menuitems`
+--
+
+CREATE TABLE `menuitems` (
+  `id` int(11) NOT NULL,
+  `code` varchar(4) NOT NULL,
+  `item` varchar(30) NOT NULL,
+  `gerechtsoort_id` int(11) NOT NULL,
+  `prijs` decimal(10,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `menuitems`
+--
+
+INSERT INTO `menuitems` (`id`, `code`, `item`, `gerechtsoort_id`, `prijs`) VALUES
+(1, 'tons', 'Tonijnsalade', 14, '10'),
+(7, 'fant', 'Fanta', 16, '10'),
+(8, 'Room', 'roomijs', 9, '10');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `reserveringen`
+--
+
+CREATE TABLE `reserveringen` (
+  `id` int(11) NOT NULL,
+  `tafel` int(11) NOT NULL,
+  `datum` date NOT NULL,
+  `tijd` time NOT NULL,
+  `klant_id` int(11) NOT NULL,
+  `aantal` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `datum_toegevoegd` timestamp NOT NULL DEFAULT current_timestamp(),
+  `aantal_k` int(11) DEFAULT NULL,
+  `allergieen` text DEFAULT NULL,
+  `opmerkingen` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `reserveringen`
+--
+
+INSERT INTO `reserveringen` (`id`, `tafel`, `datum`, `tijd`, `klant_id`, `aantal`, `status`, `datum_toegevoegd`, `aantal_k`, `allergieen`, `opmerkingen`) VALUES
+(1, 1, '2023-01-13', '20:00:00', 1, 1, 1, '2023-01-12 07:32:08', 1, 'Geen', 'Geen'),
+(2, 2, '2023-01-12', '20:00:00', 1, 1, 1, '2023-01-12 11:26:11', 1, 'Nee', 'Nee'),
+(3, 3, '2023-01-12', '21:00:00', 2, 2, 1, '2023-01-12 14:23:23', 0, 'Geen', 'Geen');
+
+--
+-- Indexen voor geëxporteerde tabellen
+--
+
+--
+-- Indexen voor tabel `bestellingen`
+--
+ALTER TABLE `bestellingen`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reserveringen.id` (`reservering_id`),
+  ADD KEY `menuitemns.id` (`menu_item_id`);
+
+--
+-- Indexen voor tabel `gerechtcategorien`
+--
+ALTER TABLE `gerechtcategorien`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Code` (`code`);
+
+--
+-- Indexen voor tabel `gerechtsoorten`
+--
+ALTER TABLE `gerechtsoorten`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Code` (`code`),
+  ADD KEY `gerechtcategorien.id` (`gerechtcategorie_id`);
+
+--
+-- Indexen voor tabel `klanten`
+--
+ALTER TABLE `klanten`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexen voor tabel `menuitems`
+--
+ALTER TABLE `menuitems`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Code` (`code`),
+  ADD KEY `gerechtsoorten.id` (`gerechtsoort_id`);
+
+--
+-- Indexen voor tabel `reserveringen`
+--
+ALTER TABLE `reserveringen`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `klanten.id` (`klant_id`);
+
+--
+-- AUTO_INCREMENT voor geëxporteerde tabellen
+--
+
+--
+-- AUTO_INCREMENT voor een tabel `bestellingen`
+--
+ALTER TABLE `bestellingen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT voor een tabel `gerechtcategorien`
+--
+ALTER TABLE `gerechtcategorien`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT voor een tabel `gerechtsoorten`
+--
+ALTER TABLE `gerechtsoorten`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT voor een tabel `klanten`
+--
+ALTER TABLE `klanten`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT voor een tabel `menuitems`
+--
+ALTER TABLE `menuitems`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT voor een tabel `reserveringen`
+--
+ALTER TABLE `reserveringen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Beperkingen voor geëxporteerde tabellen
+--
+
+--
+-- Beperkingen voor tabel `bestellingen`
+--
+ALTER TABLE `bestellingen`
+  ADD CONSTRAINT `menuitemns.id` FOREIGN KEY (`menu_item_id`) REFERENCES `menuitems` (`id`),
+  ADD CONSTRAINT `reserveringen.id` FOREIGN KEY (`reservering_id`) REFERENCES `reserveringen` (`id`);
+
+--
+-- Beperkingen voor tabel `gerechtsoorten`
+--
+ALTER TABLE `gerechtsoorten`
+  ADD CONSTRAINT `gerechtcategorien.id` FOREIGN KEY (`gerechtcategorie_id`) REFERENCES `gerechtcategorien` (`id`);
+
+--
+-- Beperkingen voor tabel `menuitems`
+--
+ALTER TABLE `menuitems`
+  ADD CONSTRAINT `gerechtsoorten.id` FOREIGN KEY (`gerechtsoort_id`) REFERENCES `gerechtsoorten` (`id`) ON DELETE CASCADE;
+
+--
+-- Beperkingen voor tabel `reserveringen`
+--
+ALTER TABLE `reserveringen`
+  ADD CONSTRAINT `klanten.id` FOREIGN KEY (`klant_id`) REFERENCES `klanten` (`id`) ON DELETE CASCADE;
+COMMIT;
